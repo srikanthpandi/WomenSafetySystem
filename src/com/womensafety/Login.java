@@ -1,3 +1,4 @@
+
 package com.womensafety;
 
 import javax.swing.*;
@@ -14,6 +15,7 @@ public class Login extends JFrame {
 
     private JButton btnLogin;
     private JButton btnRegister;
+    private JButton btnAdminLogin;
 
     private JCheckBox chkShowPassword;
 
@@ -25,12 +27,12 @@ public class Login extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
 
-        JPanel mainPanel = new JPanel(new GridLayout(1,2));
+        JPanel mainPanel = new JPanel(new GridLayout(1, 2));
 
         // ================= LEFT PANEL =================
 
         JPanel leftPanel = new JPanel();
-        leftPanel.setBackground(new Color(255,228,236)); // Baby Pink
+        leftPanel.setBackground(new Color(255, 228, 236));
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
 
         leftPanel.add(Box.createVerticalGlue());
@@ -50,15 +52,12 @@ public class Login extends JFrame {
         subtitle.setForeground(Color.DARK_GRAY);
 
         JLabel info = new JLabel(
-        	    "<html><center>"
-        	    + "</Left></html>");
-
-        	info.setAlignmentX(Component.CENTER_ALIGNMENT);
-        	info.setFont(new Font("Segoe UI", Font.PLAIN, 18));
-        	info.setForeground(new Color(60,60,60));
+                "<html><center>"
+                + "</center></html>");
 
         info.setAlignmentX(Component.CENTER_ALIGNMENT);
         info.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        info.setForeground(new Color(60, 60, 60));
 
         leftPanel.add(logo);
         leftPanel.add(Box.createVerticalStrut(20));
@@ -69,18 +68,18 @@ public class Login extends JFrame {
         leftPanel.add(info);
         leftPanel.add(Box.createVerticalGlue());
 
-     // ================= RIGHT PANEL =================
+        // ================= RIGHT PANEL =================
 
         JPanel rightPanel = new JPanel(new GridBagLayout());
-        rightPanel.setBackground(new Color(240,248,255)); // Light Blue
+        rightPanel.setBackground(new Color(240, 248, 255));
 
         JPanel loginCard = new JPanel();
         loginCard.setPreferredSize(new Dimension(420, 500));
         loginCard.setBackground(Color.WHITE);
 
         loginCard.setBorder(new CompoundBorder(
-                new LineBorder(new Color(220,220,220),1,true),
-                new EmptyBorder(30,30,30,30)));
+                new LineBorder(new Color(220, 220, 220), 1, true),
+                new EmptyBorder(30, 30, 30, 30)));
 
         loginCard.setLayout(new BoxLayout(loginCard, BoxLayout.Y_AXIS));
 
@@ -133,27 +132,43 @@ public class Login extends JFrame {
 
         btnLogin = new JButton("LOGIN");
         btnRegister = new JButton("REGISTER");
+        btnAdminLogin = new JButton("ADMIN LOGIN");
 
         btnLogin.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnRegister.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnAdminLogin.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         btnLogin.setMaximumSize(new Dimension(180, 40));
         btnRegister.setMaximumSize(new Dimension(180, 40));
+        btnAdminLogin.setMaximumSize(new Dimension(180, 40));
 
-        btnLogin.setBackground(new Color(25,118,210));
+        // LOGIN BUTTON
+
+        btnLogin.setBackground(new Color(25, 118, 210));
         btnLogin.setForeground(Color.WHITE);
         btnLogin.setFocusPainted(false);
         btnLogin.setBorderPainted(false);
         btnLogin.setOpaque(true);
 
-        btnRegister.setBackground(new Color(76,175,80));
+        // REGISTER BUTTON
+
+        btnRegister.setBackground(new Color(76, 175, 80));
         btnRegister.setForeground(Color.WHITE);
         btnRegister.setFocusPainted(false);
         btnRegister.setBorderPainted(false);
         btnRegister.setOpaque(true);
 
+        // ADMIN LOGIN BUTTON
+
+        btnAdminLogin.setBackground(new Color(156, 39, 176));
+        btnAdminLogin.setForeground(Color.WHITE);
+        btnAdminLogin.setFocusPainted(false);
+        btnAdminLogin.setBorderPainted(false);
+        btnAdminLogin.setOpaque(true);
+
         btnLogin.setFont(new Font("Segoe UI", Font.BOLD, 16));
         btnRegister.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        btnAdminLogin.setFont(new Font("Segoe UI", Font.BOLD, 16));
 
         // ==================================================
         // CENTER EVERYTHING INSIDE THE WHITE CARD
@@ -181,11 +196,21 @@ public class Login extends JFrame {
 
         loginCard.add(Box.createVerticalStrut(25));
 
+        // LOGIN
+
         loginCard.add(btnLogin);
 
         loginCard.add(Box.createVerticalStrut(15));
 
+        // REGISTER
+
         loginCard.add(btnRegister);
+
+        loginCard.add(Box.createVerticalStrut(15));
+
+        // ADMIN LOGIN
+
+        loginCard.add(btnAdminLogin);
 
         loginCard.add(Box.createVerticalGlue());
 
@@ -205,9 +230,10 @@ public class Login extends JFrame {
         btnLogin.addActionListener(e -> {
 
             String username = txtUsername.getText().trim();
-            String password = String.valueOf(txtPassword.getPassword());
+            String password =
+                    String.valueOf(txtPassword.getPassword());
 
-            if(username.isEmpty() || password.isEmpty()){
+            if (username.isEmpty() || password.isEmpty()) {
 
                 JOptionPane.showMessageDialog(
                         this,
@@ -216,26 +242,28 @@ public class Login extends JFrame {
                 return;
             }
 
-            try{
+            try {
 
                 Connection con = Database.getConnection();
 
                 String sql =
-                "SELECT * FROM users WHERE username=? AND password=?";
+                        "SELECT * FROM users WHERE username=? AND password=?";
 
-                PreparedStatement ps = con.prepareStatement(sql);
+                PreparedStatement ps =
+                        con.prepareStatement(sql);
 
                 ps.setString(1, username);
                 ps.setString(2, password);
 
                 ResultSet rs = ps.executeQuery();
 
-                if(rs.next()){
+                if (rs.next()) {
+
                     dispose();
 
                     new Dashboard(username).setVisible(true);
 
-                }else{
+                } else {
 
                     JOptionPane.showMessageDialog(
                             this,
@@ -245,7 +273,7 @@ public class Login extends JFrame {
 
                 con.close();
 
-            }catch(Exception ex){
+            } catch (Exception ex) {
 
                 ex.printStackTrace();
 
@@ -266,25 +294,48 @@ public class Login extends JFrame {
             new Register().setVisible(true);
 
         });
-     // Press Enter to Login
+
+        // ================= ADMIN LOGIN BUTTON =================
+
+        btnAdminLogin.addActionListener(e -> {
+
+            dispose();
+
+            new AdminLogin().setVisible(true);
+
+        });
+
+        // ================= ENTER TO LOGIN =================
+
         getRootPane().setDefaultButton(btnLogin);
 
-        // Cursor starts in Username field
+        // ================= FOCUS USERNAME =================
+
         SwingUtilities.invokeLater(() ->
                 txtUsername.requestFocusInWindow());
 
-        }   // <-- END OF CONSTRUCTOR
+    }
+
+    // ================= MAIN =================
+
     public static void main(String[] args) {
 
         try {
+
             UIManager.setLookAndFeel(
                     UIManager.getSystemLookAndFeelClassName());
+
         } catch (Exception e) {
+
             e.printStackTrace();
+
         }
 
         SwingUtilities.invokeLater(() -> {
+
             new Login().setVisible(true);
+
         });
 
-    }}
+    }
+}
