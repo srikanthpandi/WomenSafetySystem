@@ -135,6 +135,41 @@ Main database components include:
 * SOS alert history
 * Location information
 
+Architecture ::
+                ┌─────────────────────┐
+                │       USER          │
+                │  Mobile / Web App   │
+                └──────────┬──────────┘
+                           │
+                           ↓
+                ┌─────────────────────┐
+                │   PRESENTATION      │
+                │       LAYER         │
+                │ Login, SOS, Maps,   │
+                │ Emergency Contacts  │
+                └──────────┬──────────┘
+                           │
+                           ↓
+                ┌─────────────────────┐
+                │    APPLICATION /    │
+                │    BACKEND LAYER    │
+                │                     │
+                │ • Authentication    │
+                │ • SOS Processing    │
+                │ • Location Handling │
+                │ • Alert Management  │
+                └──────┬───────┬──────┘
+                       │       │
+              ┌────────┘       └─────────┐
+              ↓                          ↓
+      ┌───────────────┐          ┌──────────────┐
+      │   DATABASE    │          │ External APIs │
+      │               │          │              │
+      │ Users         │          │ GPS/Maps     │
+      │ Contacts      │          │ SMS/Email    │
+      │ SOS Alerts    │          │ Notifications │
+      │ Locations     │          └──────────────┘
+      └───────────────┘
 Example database:
 
 ```text
