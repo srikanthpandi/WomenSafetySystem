@@ -170,6 +170,7 @@ Architecture ::
       │ SOS Alerts    │          │ Notifications │
       │ Locations     │          └──────────────┘
       └───────────────┘
+
 Example database:
 
 ```text
